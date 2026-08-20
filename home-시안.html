@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>우리 동네 목소리함 — 홈 화면 시안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --primary:#1E2A22;
+    --on-primary:#FFFFFF;
+    --secondary:#5C7A5A;
+    --on-secondary:#FFFFFF;
+    --bg:#FFFFFF;
+    --surface-alt:#F7F5F0;
+    --border:#DDE3D8;
+    --shadow-sm:0 2px 8px rgba(30,42,34,.08);
+    --shadow-md:0 8px 24px rgba(30,42,34,.12);
+    --ph-bg:#DADADA;
+    --ph-fg:#96968f;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--primary);
+    font-family:'Noto Sans KR','Malgun Gothic',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h3,.site-header__org,.card__title{font-family:'Gowun Batang',serif;}
+  button{font:inherit;}
+  img,svg{max-width:100%;display:block;}
+
+  /* ---------- 헤더 ---------- */
+  .site-header{
+    display:flex;align-items:center;gap:10px;
+    padding:14px 20px;
+    border-bottom:1px solid var(--border);
+  }
+  .brand-icon{width:34px;height:34px;flex:none;}
+  .site-header__org{font-size:15px;font-weight:700;line-height:1.3;}
+
+  /* ---------- 히어로 : 기본(태블릿·PC)은 2안, 767px 이하는 1안 ---------- */
+  .hero{
+    text-align:left;max-width:720px;margin:0 auto;
+    padding:32px 20px 28px;
+  }
+  .hero__eyebrow{
+    margin:0 0 10px;
+    font-size:13px;font-weight:700;letter-spacing:.03em;
+    color:var(--secondary);
+  }
+  .hero__title{margin:0 0 14px;font-weight:700;color:var(--primary);font-size:clamp(20px,4vw,25px);line-height:1.5;}
+  .hero__desc{margin:0 0 18px;color:var(--primary);opacity:.82;font-size:14.5px;line-height:1.7;}
+  .hero__copy--mobile{display:none;}
+  .btn-primary{
+    appearance:none;cursor:pointer;border:none;
+    background:var(--primary);color:#fff;
+    font-weight:700;font-size:15px;
+    border-radius:8px;padding:14px 30px;
+    box-shadow:var(--shadow-sm);
+    transition:background .15s ease;
+  }
+  .btn-primary:hover{background:var(--secondary);}
+
+  /* ---------- 필터 바 ---------- */
+  .filter-bar{
+    display:flex;flex-wrap:wrap;gap:14px;
+    align-items:center;justify-content:space-between;
+    max-width:1100px;margin:0 auto;
+    padding:4px 20px 18px;
+  }
+  .filter-group{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+
+  .status-btn{
+    appearance:none;cursor:pointer;
+    background:#fff;color:var(--primary);
+    border:1px solid var(--border);
+    border-radius:999px;padding:8px 14px;
+    font-size:13px;font-weight:600;
+    white-space:nowrap;
+  }
+  .status-btn.is-active{background:var(--primary);border-color:var(--primary);color:#fff;}
+
+  .filter-group--cat{flex-wrap:nowrap;overflow-x:auto;max-width:60vw;padding-bottom:2px;}
+  .cat-btn{
+    appearance:none;cursor:pointer;
+    background:var(--surface-alt);color:var(--primary);
+    border:1px solid var(--border);
+    border-radius:999px;padding:7px 12px;
+    font-size:12.5px;font-weight:600;
+    white-space:nowrap;
+  }
+  .cat-btn.is-active{background:#fff;border-color:var(--secondary);color:var(--secondary);}
+
+  /* ---------- 카드 그리드 ---------- */
+  .list-section{max-width:1100px;margin:0 auto;padding:0 20px 56px;}
+  .card-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));}
+  .empty-msg{text-align:center;color:var(--secondary);font-size:14px;padding:40px 0;}
+
+  .card{
+    background:#fff;border:1px solid var(--border);border-radius:12px;
+    overflow:hidden;box-shadow:var(--shadow-sm);
+    display:flex;flex-direction:column;
+    transition:box-shadow .15s ease;
+  }
+  .card:hover{box-shadow:var(--shadow-md);}
+  .card__photo{
+    background:var(--ph-bg);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--ph-fg);font-weight:700;letter-spacing:.02em;
+    aspect-ratio:16/9;max-height:84px;font-size:11px;
+  }
+  .card__body{padding:11px;display:flex;flex-direction:column;gap:5px;flex:1;}
+  .card__top{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .badge-status{font-size:10.5px;font-weight:700;border-radius:999px;padding:2px 8px;line-height:1.7;}
+  .badge-status--received{background:#fff;border:1px solid var(--secondary);color:var(--secondary);}
+  .badge-status--progress{background:var(--secondary);color:#fff;}
+  .badge-status--done{background:var(--primary);color:#fff;}
+  .tag-cat{
+    font-size:10.5px;font-weight:600;border-radius:999px;padding:2px 8px;
+    background:var(--surface-alt);border:1px solid var(--border);color:var(--primary);
+  }
+  .card__title{margin:0;font-weight:700;line-height:1.35;color:var(--primary);font-size:13.5px;}
+  .card__excerpt{
+    margin:0;color:var(--primary);opacity:.68;line-height:1.6;font-size:12px;
+    display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden;-webkit-line-clamp:1;
+  }
+  .card__meta{
+    display:flex;justify-content:space-between;
+    margin-top:auto;padding-top:3px;
+    font-size:11px;color:var(--secondary);
+  }
+
+  /* ---------- 푸터 ---------- */
+  .site-footer{
+    border-top:1px solid var(--border);
+    background:var(--surface-alt);
+    padding:28px 20px 22px;text-align:center;
+  }
+  .forest-line{max-width:520px;margin:0 auto 16px;opacity:.5;}
+  .site-footer__row{
+    display:flex;justify-content:center;gap:14px;flex-wrap:wrap;
+    font-size:13px;font-weight:700;color:var(--primary);
+  }
+  .site-footer__copy{margin:8px 0 0;font-size:11.5px;color:var(--secondary);}
+
+  /* =========================================================
+     모바일(767px 이하)만 「안 1」 판단을 따른다
+     — 히어로 톤: 강한 한 줄 / 사진 비중: 보통(4:3) / 정보 밀도: 보통
+     ========================================================= */
+  @media (max-width:767px){
+    .hero{text-align:center;max-width:none;padding:44px 20px 40px;}
+    .hero__title{font-size:clamp(24px,7vw,30px);line-height:1.4;}
+    .hero__desc{margin:0 auto 22px;text-align:center;max-width:480px;font-size:15px;}
+    .hero__copy--desktop{display:none;}
+    .hero__copy--mobile{display:block;}
+
+    .filter-bar{flex-direction:column;align-items:stretch;}
+    .filter-group{justify-content:flex-start;}
+    .filter-group--cat{flex-wrap:wrap;overflow-x:visible;max-width:none;}
+    .cat-btn{padding:8px 14px;font-size:13px;}
+
+    .card__photo{aspect-ratio:4/3;max-height:none;font-size:12px;}
+    .card__body{padding:16px;gap:8px;}
+    .card__title{font-size:16px;line-height:1.4;}
+    .card__excerpt{font-size:13.5px;opacity:.75;-webkit-line-clamp:2;}
+    .card__meta{font-size:12px;padding-top:6px;}
+    .badge-status,.tag-cat{font-size:11px;padding:3px 10px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- 아이콘 심볼 정의 (프로젝트 icon-tree.svg 스타일 그대로 재사용) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="icon-tree" viewBox="0 0 512 512">
+    <rect x="0" y="0" width="512" height="512" rx="112" fill="#FFFFFF"/>
+    <g transform="translate(64,64) scale(9.6)">
+      <ellipse cx="21" cy="21" rx="16" ry="16" fill="#1E2A22" opacity="0.08"/>
+      <path fill="#4C6A4A" stroke="#1E2A22" stroke-width="2.4" stroke-linejoin="round" d="M20,4 C27,3 33,8 33,15 C33,17 32,19 31,20 C32,23 30,27 26,28 C24,30 17,30 15,28 C10,28 7,24 8,20 C6,18 6,14 8,11 C10,6 15,4 20,4 Z"/>
+      <path fill="#8B5E3C" stroke="#1E2A22" stroke-width="2" stroke-linejoin="round" d="M17,29 L23,29 L22,36 L18,36 Z"/>
+      <path stroke="#1E2A22" stroke-width="2.4" stroke-linecap="round" d="M12,36 L28,36"/>
+      <circle cx="16" cy="15" r="1.8" fill="#E8A93A" stroke="#1E2A22" stroke-width="1.2"/>
+      <circle cx="25" cy="20" r="1.8" fill="#D9603D" stroke="#1E2A22" stroke-width="1.2"/>
+    </g>
+  </symbol>
+</svg>
+
+<header class="site-header">
+  <svg class="brand-icon"><use href="#icon-tree"/></svg>
+  <span class="site-header__org">남양주환경교육사회적협동조합</span>
+</header>
+
+<section class="hero">
+  <p class="hero__eyebrow">우리 동네 목소리함</p>
+
+  <!-- 태블릿·PC: 차분한 안내 톤(2안) -->
+  <div class="hero__copy hero__copy--desktop">
+    <h1 class="hero__title">동네에서 겪은 불편이나 제안을 남겨보세요</h1>
+    <p class="hero__desc">가로등이 안 켜진다, 그네가 삐걱거린다 같은 이야기를 글로 남기면, 저희가 모아서 확인하고 처리 상황을 접수 · 처리중 · 완료 단계로 알려드립니다.</p>
+  </div>
+
+  <!-- 모바일: 강한 한 줄 톤(1안) -->
+  <div class="hero__copy hero__copy--mobile">
+    <h1 class="hero__title">동네 불편, 말하면 달라집니다</h1>
+    <p class="hero__desc">골목 가로등부터 놀이터 그네까지 — 남긴 글은 접수 → 처리중 → 완료로 진행 상황이 남습니다.</p>
+  </div>
+
+  <button type="button" class="btn-primary">의견 남기기</button>
+</section>
+
+<section class="filter-bar">
+  <div class="filter-group filter-group--status" role="group" aria-label="처리상태 필터">
+    <button type="button" class="status-btn is-active" data-status="all">전체</button>
+    <button type="button" class="status-btn" data-status="접수">접수</button>
+    <button type="button" class="status-btn" data-status="처리중">처리중</button>
+    <button type="button" class="status-btn" data-status="완료">완료</button>
+  </div>
+  <div class="filter-group filter-group--cat" role="group" aria-label="분야 필터">
+    <button type="button" class="cat-btn is-active" data-cat="all">전체 분야</button>
+    <button type="button" class="cat-btn" data-cat="안전">안전</button>
+    <button type="button" class="cat-btn" data-cat="시설물">시설물</button>
+    <button type="button" class="cat-btn" data-cat="환경">환경</button>
+    <button type="button" class="cat-btn" data-cat="교통">교통</button>
+    <button type="button" class="cat-btn" data-cat="기타">기타</button>
+  </div>
+</section>
+
+<section class="list-section">
+  <div class="card-grid">
+    <article class="card" data-status="접수" data-cat="안전">
+      <div class="card__photo">사진</div>
+      <div class="card__body">
+        <div class="card__top">
+          <span class="badge-status badge-status--received">접수</span>
+          <span class="tag-cat">안전</span>
+        </div>
+        <h3 class="card__title">정자동 세월교 앞 가로등이 계속 꺼져 있어요</h3>
+        <p class="card__excerpt">밤에 산책하는데 가로등이 사흘째 안 들어와요. 어두워서 자전거랑 부딪힐 뻔했습니다. 빠른 확인 부탁드려요.</p>
+        <div class="card__meta"><span>산책러</span><span>2026.08.18</span></div>
+      </div>
+    </article>
+    <article class="card" data-status="처리중" data-cat="시설물">
+      <div class="card__photo">사진</div>
+      <div class="card__body">
+        <div class="card__top">
+          <span class="badge-status badge-status--progress">처리중</span>
+          <span class="tag-cat">시설물</span>
+        </div>
+        <h3 class="card__title">정자근린공원 놀이터 그네가 삐걱거려요</h3>
+        <p class="card__excerpt">그네 체인 쪽에서 계속 끼익 소리가 나요. 아이들이 타기 무서워합니다. 점검이 필요할 것 같아요.</p>
+        <div class="card__meta"><span>놀이터맘</span><span>2026.08.15</span></div>
+      </div>
+    </article>
+    <article class="card" data-status="접수" data-cat="교통">
+      <div class="card__photo">사진</div>
+      <div class="card__body">
+        <div class="card__top">
+          <span class="badge-status badge-status--received">접수</span>
+          <span class="tag-cat">교통</span>
+        </div>
+        <h3 class="card__title">다산동 버스정류장에 비 가릴 지붕이 없어요</h3>
+        <p class="card__excerpt">출퇴근 시간에 비 오면 우산 쓰고 서 있어야 해요. 근처 정류장은 다 지붕이 있는데 여기만 없네요.</p>
+        <div class="card__meta"><span>출근러</span><span>2026.08.12</span></div>
+      </div>
+    </article>
+    <article class="card" data-status="처리중" data-cat="환경">
+      <div class="card__photo">사진</div>
+      <div class="card__body">
+        <div class="card__top">
+          <span class="badge-status badge-status--progress">처리중</span>
+          <span class="tag-cat">환경</span>
+        </div>
+        <h3 class="card__title">왕숙천 산책로에 쓰레기가 계속 쌓여요</h3>
+        <p class="card__excerpt">주말마다 치워도 다음날이면 다시 쌓여 있어요. 분리수거함이 하나뿐이라 부족한 것 같습니다.</p>
+        <div class="card__meta"><span>강변주민</span><span>2026.08.09</span></div>
+      </div>
+    </article>
+    <article class="card" data-status="완료" data-cat="안전">
+      <div class="card__photo">사진</div>
+      <div class="card__body">
+        <div class="card__top">
+          <span class="badge-status badge-status--done">완료</span>
+          <span class="tag-cat">안전</span>
+        </div>
+        <h3 class="card__title">경로당 앞 인도 턱 낮춰주셔서 감사합니다</h3>
+        <p class="card__excerpt">휠체어로 다니기 힘들었던 턱을 낮춰주셨더라고요. 어르신들이 다니기 훨씬 편해졌다고 하십니다.</p>
+        <div class="card__meta"><span>동네주민</span><span>2026.07.28</span></div>
+      </div>
+    </article>
+  </div>
+  <p class="empty-msg" hidden>조건에 맞는 글이 없습니다.</p>
+</section>
+
+<footer class="site-footer">
+  <svg class="forest-line" viewBox="0 0 720 40" preserveAspectRatio="none" aria-hidden="true">
+    <line x1="0" y1="32" x2="720" y2="32" stroke="#5C7A5A" stroke-width="1.5" stroke-linecap="round"/>
+    <polygon points="30,8 20,28 40,28" fill="#5C7A5A"/><circle cx="75" cy="21" r="9" fill="#5C7A5A"/>
+    <polygon points="120,8 110,28 130,28" fill="#5C7A5A"/><circle cx="165" cy="21" r="9" fill="#5C7A5A"/>
+    <polygon points="210,8 200,28 220,28" fill="#5C7A5A"/><circle cx="255" cy="21" r="9" fill="#5C7A5A"/>
+    <polygon points="300,8 290,28 310,28" fill="#5C7A5A"/><circle cx="345" cy="21" r="9" fill="#5C7A5A"/>
+    <polygon points="390,8 380,28 400,28" fill="#5C7A5A"/><circle cx="435" cy="21" r="9" fill="#5C7A5A"/>
+    <polygon points="480,8 470,28 490,28" fill="#5C7A5A"/><circle cx="525" cy="21" r="9" fill="#5C7A5A"/>
+    <polygon points="570,8 560,28 580,28" fill="#5C7A5A"/><circle cx="615" cy="21" r="9" fill="#5C7A5A"/>
+    <polygon points="660,8 650,28 670,28" fill="#5C7A5A"/><circle cx="705" cy="21" r="9" fill="#5C7A5A"/>
+  </svg>
+  <div class="site-footer__row">
+    <span>남양주환경교육사회적협동조합</span>
+    <span>우리 동네 목소리함</span>
+  </div>
+  <p class="site-footer__copy">© 2026. 이 화면은 디자인 시안입니다.</p>
+</footer>
+
+<script>
+  var cards = document.querySelectorAll('.card');
+  var statusBtns = document.querySelectorAll('.status-btn');
+  var catBtns = document.querySelectorAll('.cat-btn');
+  var emptyMsg = document.querySelector('.empty-msg');
+  var curStatus = 'all', curCat = 'all';
+
+  function apply(){
+    var anyVisible = false;
+    cards.forEach(function(card){
+      var okStatus = curStatus === 'all' || card.dataset.status === curStatus;
+      var okCat = curCat === 'all' || card.dataset.cat === curCat;
+      var show = okStatus && okCat;
+      card.style.display = show ? '' : 'none';
+      if (show) anyVisible = true;
+    });
+    if (emptyMsg) emptyMsg.hidden = anyVisible;
+  }
+
+  statusBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      statusBtns.forEach(function(b){ b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      curStatus = btn.dataset.status;
+      apply();
+    });
+  });
+
+  catBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      catBtns.forEach(function(b){ b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      curCat = btn.dataset.cat;
+      apply();
+    });
+  });
+</script>
+</body>
+</html>

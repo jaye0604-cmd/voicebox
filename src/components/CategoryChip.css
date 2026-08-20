@@ -1,0 +1,26 @@
+.category-chip {
+  display: inline-block;
+  appearance: none;
+  cursor: default;
+  font-family: var(--font-body);
+  font-size: var(--meta-size);
+  font-weight: 500;
+  letter-spacing: var(--meta-tracking);
+  border-radius: var(--radius-full);
+  padding: var(--space-2xs) var(--space-xs);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  color: var(--color-primary);
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+button.category-chip {
+  cursor: pointer;
+}
+
+.category-chip--selected {
+  background: #fff;
+  border-color: var(--color-secondary);
+  color: var(--color-secondary);
+}

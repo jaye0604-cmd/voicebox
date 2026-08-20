@@ -1,0 +1,67 @@
+:root {
+  /* Colors — DESIGN.md */
+  --color-primary: #1e2a22;
+  --color-on-primary: #ffffff;
+  --color-secondary: #5c7a5a;
+  --color-on-secondary: #ffffff;
+  --color-background: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f7f5f0;
+  --color-border: #dde3d8;
+  --color-shadow: rgba(30, 42, 34, 0.12);
+
+  /* 팔레트 예외 (기능상 고정 중립색) */
+  --color-photo-placeholder-bg: #dadada;
+  --color-photo-placeholder-fg: #96968f;
+  --color-google-border: #dadce0;
+  --color-google-text: #3c4043;
+
+  /* Typography */
+  --font-title: 'Gowun Batang', serif;
+  --font-body: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+
+  --title-lg-size: 32px;
+  --title-lg-line: 40px;
+  --title-md-size: 24px;
+  --title-md-line: 32px;
+  --title-sm-size: 18px;
+  --title-sm-line: 26px;
+  --title-xs-size: 15px;
+  --title-xs-line: 22px;
+
+  --body-lg-size: 18px;
+  --body-lg-line: 30px;
+  --body-md-size: 16px;
+  --body-md-line: 26px;
+  --body-sm-size: 13px;
+  --body-sm-line: 20px;
+
+  --meta-size: 13px;
+  --meta-line: 18px;
+  --meta-tracking: 0.02em;
+
+  --button-size: 15px;
+  --button-line: 20px;
+  --button-tracking: 0.01em;
+
+  /* Rounded */
+  --radius-sm: 4px;
+  --radius-default: 8px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Spacing */
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 40px;
+  --space-xl: 64px;
+
+  /* Shadow */
+  --shadow-sm: 0 2px 8px rgba(30, 42, 34, 0.08);
+  --shadow-md: 0 8px 24px rgba(30, 42, 34, 0.12);
+
+  /* Breakpoint reference (mobile: 0-767 / tablet: 768-1023 / desktop: 1024+) */
+  --container-max: 1100px;
+}
