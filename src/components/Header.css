@@ -1,6 +1,50 @@
 .site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: var(--space-xs) var(--space-sm);
   border-bottom: 1px solid var(--color-border);
+}
+
+.site-header__auth-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.site-header__auth-link {
+  font-family: var(--font-body);
+  font-size: var(--button-size);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.site-header__avatar-btn {
+  appearance: none;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  border-radius: var(--radius-full);
+}
+
+.site-header__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 1px solid var(--color-border);
+}
+
+.site-header__avatar--fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--body-sm-size);
 }
 
 .site-header__brand {

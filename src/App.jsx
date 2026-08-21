@@ -1,12 +1,17 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Layout from './components/Layout.jsx'
 import HomePage from './pages/HomePage.jsx'
 import WritePage from './pages/WritePage.jsx'
 import PostDetailPage from './pages/PostDetailPage.jsx'
+import AuthGatePage from './pages/AuthGatePage.jsx'
+import MyPage from './pages/MyPage.jsx'
 import { supabase } from './lib/supabaseClient.js'
+import { AuthProvider, useAuth } from './context/AuthContext.jsx'
+import { ToastProvider } from './context/ToastContext.jsx'
 
-export default function App() {
+function AppRoutes() {
+  const { user, loading } = useAuth()
   const [posts, setPosts] = useState([])
 
   useEffect(() => {
@@ -44,9 +49,11 @@ export default function App() {
       photo_url = publicUrl
     }
 
+    const author = user.user_metadata?.full_name || user.user_metadata?.name || '익명'
+
     const { data, error } = await supabase
       .from('posts')
-      .insert({ title, content, category, author: '익명', photo_url })
+      .insert({ title, content, category, author, author_id: user.id, photo_url })
       .select()
       .single()
 
@@ -56,15 +63,33 @@ export default function App() {
     return data.id
   }
 
+  function guard(element) {
+    if (loading) return null
+    return user ? element : <Navigate to="/login" replace />
+  }
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<HomePage posts={posts} />} />
-          <Route path="/write" element={<WritePage onAddPost={addPost} />} />
-          <Route path="/posts/:id" element={<PostDetailPage posts={posts} />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<HomePage posts={posts} />} />
+        <Route path="/write" element={guard(<WritePage onAddPost={addPost} />)} />
+        <Route path="/posts/:id" element={<PostDetailPage posts={posts} />} />
+        <Route path="/login" element={<AuthGatePage mode="login" />} />
+        <Route path="/signup" element={<AuthGatePage mode="signup" />} />
+        <Route path="/mypage" element={guard(<MyPage />)} />
+      </Route>
+    </Routes>
+  )
+}
+
+export default function App() {
+  return (
+    <ToastProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </AuthProvider>
+    </ToastProvider>
   )
 }

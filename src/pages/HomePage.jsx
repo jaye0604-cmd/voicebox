@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import StatusFilterBar, { ALL } from '../components/StatusFilterBar.jsx'
 import PostCard from '../components/PostCard.jsx'
+import { useAuth } from '../context/AuthContext.jsx'
 import './HomePage.css'
 
 const SERVICE_ONE_LINER = '동네에서 겪은 불편이나 제안을 남겨보세요'
@@ -9,6 +10,7 @@ const SERVICE_DESC =
   '가로등이 안 켜진다, 그네가 삐걱거린다 같은 이야기를 글로 남기면, 저희가 모아서 확인하고 처리 상황을 접수 · 처리중 · 완료 단계로 알려드립니다.'
 
 export default function HomePage({ posts }) {
+  const { user } = useAuth()
   const [status, setStatus] = useState(ALL)
   const [category, setCategory] = useState(ALL)
 
@@ -37,7 +39,7 @@ export default function HomePage({ posts }) {
           </p>
         </div>
 
-        <Link to="/write" className="btn-primary">
+        <Link to={user ? '/write' : '/login'} className="btn-primary">
           의견 남기기
         </Link>
       </section>
