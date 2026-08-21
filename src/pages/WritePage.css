@@ -29,6 +29,18 @@
   color: var(--color-primary);
 }
 
+.write-form__field-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+}
+
+.write-form__ai-btn {
+  padding: var(--space-2xs) var(--space-xs);
+  font-size: var(--meta-size);
+}
+
 .write-form__error {
   margin: 0;
   color: #b3261e;

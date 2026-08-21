@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CATEGORIES } from '../data/posts.js'
 import PhotoUpload from '../components/PhotoUpload.jsx'
+import { supabase } from '../lib/supabaseClient.js'
 import './WritePage.css'
 
 export default function WritePage({ onAddPost }) {
@@ -13,6 +14,43 @@ export default function WritePage({ onAddPost }) {
   const [photoPreview, setPhotoPreview] = useState(null)
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [aiLoading, setAiLoading] = useState(false)
+
+  async function handleAiAssist() {
+    if (!content.trim()) {
+      setError('AI 작성도우미를 쓰려면 내용을 먼저 짧게라도 적어주세요.')
+      return
+    }
+
+    setError('')
+    setAiLoading(true)
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+
+      const res = await fetch('/api/ai-draft', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+        body: JSON.stringify({ draft: content.trim() }),
+      })
+
+      const result = await res.json()
+      if (!res.ok) throw new Error(result.error || 'AI 작성도우미 호출에 실패했습니다.')
+
+      setTitle(result.title)
+      setContent(result.content)
+      setCategory(result.category)
+    } catch (err) {
+      console.error('AI assist failed:', err)
+      setError(err.message || 'AI 작성도우미 호출에 실패했습니다.')
+    } finally {
+      setAiLoading(false)
+    }
+  }
 
   function handlePhotoChange(file) {
     setPhotoFile(file)
@@ -66,13 +104,23 @@ export default function WritePage({ onAddPost }) {
         </div>
 
         <div className="write-form__field">
-          <label htmlFor="content">내용</label>
+          <div className="write-form__field-header">
+            <label htmlFor="content">내용</label>
+            <button
+              type="button"
+              className="btn-secondary write-form__ai-btn"
+              onClick={handleAiAssist}
+              disabled={aiLoading}
+            >
+              {aiLoading ? 'AI 작성 중...' : 'AI 작성도우미'}
+            </button>
+          </div>
           <textarea
             id="content"
             className="input-field"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="언제, 어디서 겪은 일인지 자세히 적어주세요."
+            placeholder="짧게라도 적고 'AI 작성도우미'를 눌러보세요. 언제, 어디서 겪은 일인지 적어주시면 더 좋아요."
           />
         </div>
 
