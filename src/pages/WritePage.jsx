@@ -9,15 +9,19 @@ export default function WritePage({ onAddPost }) {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [category, setCategory] = useState('')
+  const [photoFile, setPhotoFile] = useState(null)
   const [photoPreview, setPhotoPreview] = useState(null)
   const [error, setError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
   function handlePhotoChange(file) {
+    setPhotoFile(file)
     setPhotoPreview(URL.createObjectURL(file))
   }
 
   function handlePhotoRemove() {
     if (photoPreview) URL.revokeObjectURL(photoPreview)
+    setPhotoFile(null)
     setPhotoPreview(null)
   }
 
@@ -29,16 +33,19 @@ export default function WritePage({ onAddPost }) {
       return
     }
 
+    setSubmitting(true)
     try {
       await onAddPost({
         title: title.trim(),
         content: content.trim(),
         category,
+        photoFile,
       })
       navigate('/')
     } catch (err) {
       console.error('Failed to save post:', err)
       setError('저장에 실패했습니다. 잠시 후 다시 시도해 주세요.')
+      setSubmitting(false)
     }
   }
 
@@ -97,8 +104,8 @@ export default function WritePage({ onAddPost }) {
 
         {error && <p className="write-form__error">{error}</p>}
 
-        <button type="submit" className="btn-primary write-form__submit">
-          글 남기기
+        <button type="submit" className="btn-primary write-form__submit" disabled={submitting}>
+          {submitting ? '저장 중...' : '글 남기기'}
         </button>
       </form>
     </section>

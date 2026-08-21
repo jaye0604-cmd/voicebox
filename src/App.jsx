@@ -26,10 +26,27 @@ export default function App() {
     loadPosts()
   }, [])
 
-  async function addPost({ title, content, category }) {
+  async function addPost({ title, content, category, photoFile }) {
+    let photo_url = null
+
+    if (photoFile) {
+      const ext = photoFile.name.split('.').pop()
+      const filePath = `${crypto.randomUUID()}.${ext}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('post-photos')
+        .upload(filePath, photoFile)
+      if (uploadError) throw uploadError
+
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from('post-photos').getPublicUrl(filePath)
+      photo_url = publicUrl
+    }
+
     const { data, error } = await supabase
       .from('posts')
-      .insert({ title, content, category, author: '익명' })
+      .insert({ title, content, category, author: '익명', photo_url })
       .select()
       .single()
 
