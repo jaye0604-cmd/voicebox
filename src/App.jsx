@@ -34,13 +34,13 @@ export default function App() {
       const filePath = `${crypto.randomUUID()}.${ext}`
 
       const { error: uploadError } = await supabase.storage
-        .from('post-photos')
+        .from('photos')
         .upload(filePath, photoFile)
       if (uploadError) throw uploadError
 
       const {
         data: { publicUrl },
-      } = supabase.storage.from('post-photos').getPublicUrl(filePath)
+      } = supabase.storage.from('photos').getPublicUrl(filePath)
       photo_url = publicUrl
     }
 
