@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
 import StatusBadge from '../components/StatusBadge.jsx'
 import CategoryChip from '../components/CategoryChip.jsx'
+import { formatDate } from '../data/posts.js'
 import './PostDetailPage.css'
 
 export default function PostDetailPage({ posts }) {
@@ -24,9 +25,9 @@ export default function PostDetailPage({ posts }) {
         ← 목록으로
       </Link>
 
-      {post.photo && (
+      {post.photo_url && (
         <div className="post-detail__photo">
-          <img src={post.photo} alt="" />
+          <img src={post.photo_url} alt="" />
         </div>
       )}
 
@@ -39,7 +40,7 @@ export default function PostDetailPage({ posts }) {
 
       <div className="post-detail__meta">
         <span>{post.author}</span>
-        <span>{post.date}</span>
+        <span>{formatDate(post.created_at)}</span>
       </div>
 
       <p className="post-detail__content">{post.content}</p>

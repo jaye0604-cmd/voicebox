@@ -1,14 +1,15 @@
 import { Link } from 'react-router-dom'
 import StatusBadge from './StatusBadge.jsx'
 import CategoryChip from './CategoryChip.jsx'
+import { formatDate } from '../data/posts.js'
 import './PostCard.css'
 
 export default function PostCard({ post }) {
   return (
     <Link to={`/posts/${post.id}`} className="post-card">
       <div className="post-card__photo">
-        {post.photo ? (
-          <img src={post.photo} alt="" />
+        {post.photo_url ? (
+          <img src={post.photo_url} alt="" />
         ) : (
           <span>사진</span>
         )}
@@ -22,7 +23,7 @@ export default function PostCard({ post }) {
         <p className="post-card__excerpt">{post.content}</p>
         <div className="post-card__meta">
           <span>{post.author}</span>
-          <span>{post.date}</span>
+          <span>{formatDate(post.created_at)}</span>
         </div>
       </div>
     </Link>

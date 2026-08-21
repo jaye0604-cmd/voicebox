@@ -1,27 +1,42 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout.jsx'
 import HomePage from './pages/HomePage.jsx'
 import WritePage from './pages/WritePage.jsx'
 import PostDetailPage from './pages/PostDetailPage.jsx'
-import { initialPosts, STATUS, formatToday } from './data/posts.js'
+import { supabase } from './lib/supabaseClient.js'
 
 export default function App() {
-  const [posts, setPosts] = useState(initialPosts)
+  const [posts, setPosts] = useState([])
 
-  function addPost({ title, content, category, photo }) {
-    const newPost = {
-      id: Date.now(),
-      title,
-      content,
-      category,
-      photo,
-      status: STATUS.RECEIVED,
-      author: '익명',
-      date: formatToday(),
+  useEffect(() => {
+    async function loadPosts() {
+      const { data, error } = await supabase
+        .from('posts')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        console.error('Failed to load posts:', error)
+        return
+      }
+      setPosts(data)
     }
-    setPosts((prev) => [newPost, ...prev])
-    return newPost.id
+
+    loadPosts()
+  }, [])
+
+  async function addPost({ title, content, category }) {
+    const { data, error } = await supabase
+      .from('posts')
+      .insert({ title, content, category, author: '익명' })
+      .select()
+      .single()
+
+    if (error) throw error
+
+    setPosts((prev) => [data, ...prev])
+    return data.id
   }
 
   return (

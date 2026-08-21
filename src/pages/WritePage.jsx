@@ -21,7 +21,7 @@ export default function WritePage({ onAddPost }) {
     setPhotoPreview(null)
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
 
     if (!title.trim() || !content.trim() || !category) {
@@ -29,13 +29,17 @@ export default function WritePage({ onAddPost }) {
       return
     }
 
-    onAddPost({
-      title: title.trim(),
-      content: content.trim(),
-      category,
-      photo: photoPreview,
-    })
-    navigate('/')
+    try {
+      await onAddPost({
+        title: title.trim(),
+        content: content.trim(),
+        category,
+      })
+      navigate('/')
+    } catch (err) {
+      console.error('Failed to save post:', err)
+      setError('저장에 실패했습니다. 잠시 후 다시 시도해 주세요.')
+    }
   }
 
   return (

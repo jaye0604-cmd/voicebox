@@ -3,6 +3,7 @@ dist
 .DS_Store
 *.local
 .claude/settings.local.json
+.env
 
 # 프로젝트와 무관한 파일 (강의 자료 등) — 공개 저장소에 올리지 않음
 실습가이드_Day2.pdf
